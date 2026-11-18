@@ -66,7 +66,7 @@ The [Round 1 research report](docs/SupeRR_Selector_Round1_Report.pdf) contains t
 
 ## Project post
 
-I also shared the project and the process behind it on LinkedIn: [Read the PressurePlay post](ADD_LINKEDIN_POST_URL).
+I also shared the project and the process behind it on LinkedIn: [Read the PressurePlay post](https://lnkd.in/p/giuZNhDw).
 
 <!-- Replace ADD_LINKEDIN_POST_URL with the public LinkedIn post URL before publishing. -->
 
