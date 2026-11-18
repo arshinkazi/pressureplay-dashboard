@@ -1,57 +1,95 @@
 # PressurePlay
 
-**Interactive T20 pressure-performance scouting dashboard** built for SupeRR Selector Season 2, Round 1.
+**An interactive T20 pressure-performance scouting dashboard** created for **SupeRR Selector Season 2, Round 1**.
 
 ## Live demos
 
-- **Streamlit analytical dashboard (primary):** _Add your deployed Streamlit URL here_
-- **HTML dashboard (GitHub Pages):** _Add your published GitHub Pages URL here_
-- **Source code:** This GitHub repository
+- **Primary dashboard — Streamlit:** https://pressureplay-dashboard.streamlit.app/
+- **HTML companion — GitHub Pages:** https://arshinkazi.github.io/pressureplay-dashboard/
+- **Source code:** https://github.com/arshinkazi/pressureplay-dashboard
 
-The Streamlit app is the primary analytical experience. The HTML version is a lightweight companion that can be opened without a Python server.
+The Streamlit app is the primary analytical experience, with player search, filters, player inspection, comparisons and methodology. The HTML dashboard is a lightweight companion for quickly exploring the presented findings.
 
-## What it includes
+## What the project explores
 
-- Separate batting and bowling pressure rankings
+PressurePlay examines player performance in demanding T20 match situations, with separate batting and bowling views. It brings together pressure-specific performance indicators, consistency and sample-size context to support a more informed scouting discussion.
+
+### Dashboard features
+
+- Separate batting and bowling rankings
 - Player search and minimum pressure-ball filters
-- Player-level performance inspection
+- Individual player performance inspection
 - Side-by-side player comparisons
 - Summary charts and dataset coverage indicators
-- Plain-language methodology, scoring weights and limitations
+- Methodology, scoring weights, definitions and limitations
 
 ## Run locally
 
+Python 3.10 or newer is recommended.
+
 ```bash
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
+```
+
+Activate the environment:
+
+```bash
+# Windows
+.venv\\Scripts\\activate
+
+# macOS / Linux
+source .venv/bin/activate
+```
+
+Install dependencies and launch:
+
+```bash
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Deploy on Streamlit Community Cloud
+## Deploy the Streamlit app
 
-1. Push this repository to GitHub.
+1. Push the repository to GitHub.
 2. Open [Streamlit Community Cloud](https://share.streamlit.io/).
-3. Sign in with GitHub and authorize access to this repository.
-4. Choose **Create app**.
-5. Select this repository, branch `main`, and main file path `app.py`.
-6. Deploy. Streamlit will install packages from `requirements.txt`.
+3. Sign in with GitHub and grant access to this repository.
+4. Create a new app using this repository, the `main` branch and `app.py` as the main file.
+5. Deploy. Streamlit installs the dependencies listed in `requirements.txt`.
 
-## Project contents
+## Deploy the HTML companion
 
-- `app.py` — Streamlit application
-- `index.html` — standalone HTML dashboard for GitHub Pages
-- `rankings.csv` — derived top-ten batter and bowler summary metrics
-- `requirements.txt` — Python dependencies
-- `docs/` — submission report (add the final PDF here)
+The `index.html` file is a standalone HTML dashboard and can be hosted through GitHub Pages:
 
-## Data and interpretation notes
+1. Open the repository's **Settings → Pages**.
+2. Choose **Deploy from a branch**.
+3. Select `main` and the root folder (`/`).
+4. Save and wait for the Pages deployment.
 
-The dashboard contains derived player-level summary metrics from the competition data pack. It does not include the raw ball-by-ball file. Check the competition's data-use and sharing terms before publishing or distributing derived results.
+## Project structure
 
-Rankings are statistical pressure rankings, not auction recommendations. The dashboard does not model auction registration, availability, price, fitness or role. Pressure is a match-state proxy and should not be interpreted as a direct measure of a player's psychology.
+```text
+pressureplay-dashboard/
+├── app.py
+├── index.html
+├── rankings.csv
+├── requirements.txt
+├── render.yaml
+├── README.md
+├── DEPLOY.md
+├── .streamlit/
+│   └── config.toml
+└── docs/
+    └── SupeRR_Selector_Round1_Report.pdf
+```
 
-## Method summary
+## Data, methodology and limitations
 
-The analysis uses IPL and T20 International matches in the supplied data window (2022 to 1 November 2026). The dashboard explains the pressure definitions, batting and bowling measures, scoring weights, sample-size adjustment and eligibility thresholds in its Methodology section.
+The dashboard uses derived player-level summary metrics from the supplied competition data pack. It does not publish the raw ball-by-ball dataset. Check the competition's data-use and sharing terms before distributing derived results.
+
+The analysis covers IPL and T20 International matches in the supplied data window (2022 to 1 November 2026). The dashboard's Methodology section describes the pressure definitions, batting and bowling measures, scoring weights, sample-size adjustment and eligibility thresholds.
+
+These rankings are statistical scouting evidence, not definitive recruitment recommendations. Auction registration, availability, price, fitness and role are not modelled. Pressure is a match-state proxy and should not be interpreted as a direct measure of a player's psychology.
+
+## Submission report
+
+The Round 1 report is included in `docs/`. The live dashboards should be used alongside the report to understand the findings and the methodology behind them.
