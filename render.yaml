@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: pressureplay-dashboard
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .

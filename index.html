@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PressurePlay | T20 scouting notes</title>
+<style>
+:root{--paper:#f7f6f0;--ink:#292d29;--muted:#6e756e;--line:#dddcd2;--green:#3e624c;--rust:#a6533d;--soft:#eeede5}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Arial,Helvetica,sans-serif}
+header{max-width:1100px;margin:auto;padding:42px 28px 20px;border-bottom:1px solid var(--line)}
+.kicker{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--green);font-weight:bold}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:normal;line-height:1.15}
+h1{font-size:42px;margin:12px 0 8px}h2{font-size:28px;margin:8px 0 12px}h3{font-size:21px;margin:0 0 10px}
+.deck{font:18px/1.5 Georgia,serif;color:var(--muted);max-width:760px}
+main{max-width:1100px;margin:auto;padding:24px 28px 70px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 25px}
+nav button,.toggle button{border:1px solid var(--line);background:transparent;padding:9px 14px;color:var(--ink);cursor:pointer;border-radius:2px}
+nav button.active,.toggle button.active{background:var(--green);color:white;border-color:var(--green)}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin:22px 0 34px}
+.metric{border-top:2px solid var(--green);padding:10px 0}
+.metric b{display:block;font:30px Georgia,serif}.metric span{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.columns{display:grid;grid-template-columns:1.1fr .9fr;gap:32px}
+.note{background:var(--soft);border-left:3px solid var(--rust);padding:14px 17px}
+hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+table{width:100%;border-collapse:collapse;margin:14px 0 24px;font-size:13px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);border-bottom:2px solid var(--ink);padding:10px 8px}
+td{padding:11px 8px;border-bottom:1px solid var(--line)}tr:hover td{background:#f0efe8}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.barline{display:flex;align-items:center;gap:12px;margin:11px 0;font-size:13px}
+.barname{width:150px;flex-shrink:0}.bar{height:9px;background:#e5e4db;flex:1}.bar i{display:block;height:100%;background:var(--green)}
+.bar.rust i{background:var(--rust)}.barvalue{width:42px;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0 18px}
+select{padding:9px;border:1px solid var(--line);background:#fff;color:var(--ink);min-width:190px}
+.small{font-size:12px;color:var(--muted)}
+.page{display:none}.page.active{display:block}
+footer{max-width:1100px;margin:auto;padding:18px 28px 32px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+@media(max-width:760px){h1{font-size:34px}.metrics{grid-template-columns:repeat(2,1fr)}.columns{grid-template-columns:1fr}.barname{width:112px}main,header,footer{padding-left:18px;padding-right:18px}}
+</style>
+</head>
+<body>
+<header>
+<div class="kicker">SupeRR Selector Season 2 · Round 1</div>
+<h1>PressurePlay</h1>
+<div class="deck">A small scouting notebook on who holds their shape when a T20 innings gets difficult.</div>
+</header>
+<main>
+<nav id="nav">
+<button class="active" data-page="overview">Overview</button>
+<button data-page="batters">Batters</button>
+<button data-page="bowlers">Bowlers</button>
+<button data-page="compare">Compare players</button>
+<button data-page="method">Method</button>
+</nav>
+<section class="page active" id="overview">
+<div class="metrics">
+<div class="metric"><b>837</b><span>Matches in scope</span></div>
+<div class="metric"><b>193,988</b><span>Deliveries analysed</span></div>
+<div class="metric"><b>69,326</b><span>Batter-pressure balls</span></div>
+<div class="metric"><b>55,421</b><span>Bowler-pressure balls</span></div>
+</div>
+<div class="columns">
+<div><h2>The short read</h2>
+<h3>Batting</h3><p>Fakhar Zaman leads the combined pressure ranking. Tim David has the largest pressure-ball sample among the top three, while Vaibhav Sooryavanshi posts the highest pressure strike rate in the top ten.</p>
+<h3>Bowling</h3><p>Sunil Narine leads the bowling list. Ravi Bishnoi has the largest pressure sample among the top five, which gives his results a broader evidence base.</p></div>
+<div class="note"><b>A note on reading the ranks</b><br>These are statistical pressure rankings, not auction availability recommendations. Sample size, role, registration and price still matter.</div>
+</div>
+<hr><div class="columns"><div><h3>Batting pressure strike rate</h3><div id="batbars"></div></div><div><h3>Bowling pressure economy</h3><div id="bowlbars"></div></div></div>
+</section>
+<section class="page" id="batters"><h2>Batters under pressure</h2><p class="small">Rank order uses the average position under the core and relaxed pressure definitions. Table values are from the core definition.</p><div id="battable"></div><div class="controls"><label for="batterpick">Inspect a batter</label><select id="batterpick"></select></div><div id="batterdetail" class="note"></div></section>
+<section class="page" id="bowlers"><h2>Bowlers under pressure</h2><p class="small">Lower pressure economy and bowling strike rate indicate better run control and wicket frequency.</p><div id="bowltable"></div><div class="controls"><label for="bowlerpick">Inspect a bowler</label><select id="bowlerpick"></select></div><div id="bowlerdetail" class="note"></div></section>
+<section class="page" id="compare"><h2>Compare players</h2><div class="controls"><div class="toggle"><button class="active" data-kind="Batter">Batters</button><button data-kind="Bowler">Bowlers</button></div><select id="playerone"></select><select id="playertwo"></select></div><div id="comparison"></div></section>
+<section class="page" id="method"><h2>How the rankings were built</h2>
+<p><b>Pressure is a match state, not simply the final overs.</b> The analysis labels pressure before each delivery, using the chase rate, current rate, wickets in hand, balls remaining and innings stage. Batting and bowling have separate rules.</p>
+<h3>Batting measures</h3><p>Pressure strike rate and average, strike-rate uplift against the player's non-pressure baseline, and the share of pressure innings at or above the player's own baseline strike rate.</p>
+<h3>Bowling measures</h3><p>Pressure economy and bowling strike rate, economy improvement against the player's non-pressure baseline, and the share of pressure innings at or below the player's own baseline economy.</p>
+<h3>Scoring</h3><ul><li>Components are winsorised at the 2nd and 98th percentiles and standardised within format-season groups.</li><li>Batting weights: 35% pressure strike rate, 25% pressure average, 20% uplift and 20% consistency.</li><li>Bowling weights: 35% pressure economy, 25% bowling strike rate, 20% economy improvement and 20% consistency.</li><li>A sample-size adjustment shrinks scores with fewer pressure balls.</li><li>Final order is the average rank across core and relaxed pressure definitions.</li></ul>
+<h3>Scope and limits</h3><p>IPL and T20 Internationals, 2022 to 1 November 2026. Eligibility requires at least 100 pressure balls and eight pressure innings. Pressure is a proxy based on match state, not a direct measure of psychology. This dashboard does not include auction registration, price, fitness or role data.</p>
+<div class="note">The rankings are descriptive scouting evidence. Combine them with role, availability, fitness and auction-price checks before a recruitment decision.</div>
+</section>
+</main>
+<footer>PressurePlay · SupeRR Selector Season 2 · Round 1<br>Analysis based on the supplied competition data pack.</footer>
+<script>
+const rows = [{"category":"Batter","rank":1,"player":"Fakhar Zaman","pressure_balls":146,"pressure_innings":11,"pressure_runs":259.0,"pressure_strike_rate":177.4,"pressure_average":37.0,"pressure_innings_success_rate":77.7,"consensus_mean_rank":1.0,"pressure_wickets":null,"pressure_economy":null,"pressure_bowling_strike_rate":null},{"category":"Batter","rank":2,"player":"Reeza Hendricks","pressure_balls":289,"pressure_innings":11,"pressure_runs":500.0,"pressure_strike_rate":173.0,"pressure_average":55.6,"pressure_innings_success_rate":71.4,"consensus_mean_rank":3.5,"pressure_wickets":null,"pressure_economy":null,"pressure_bowling_strike_rate":null},{"category":"Batter","rank":3,"player":"Tim David","pressure_balls":646,"pressure_innings":44,"pressure_runs":1215.0,"pressure_strike_rate":188.1,"pressure_average":32.0,"pressure_innings_success_rate":78.1,"consensus_mean_rank":3.5,"pressure_wickets":null,"pressure_economy":null,"pressure_bowling_strike_rate":null},{"category":"Batter","rank":4,"player":"Ryan Rickelton","pressure_balls":206,"pressure_innings":12,"pressure_runs":392.0,"pressure_strike_rate":190.3,"pressure_average":39.2,"pressure_innings_success_rate":87.8,"consensus_mean_rank":8.0,"pressure_wickets":null,"pressure_economy":null,"pressure_bowling_strike_rate":null},{"category":"Batter","rank":5,"player":"Pathum Nissanka","pressure_balls":209,"pressure_innings":9,"pressure_runs":360.0,"pressure_strike_rate":172.2,"pressure_average":45.0,"pressure_innings_success_rate":65.6,"consensus_mean_rank":8.0,"pressure_wickets":null,"pressure_economy":null,"pressure_bowling_strike_rate":null},{"category":"Batter","rank":6,"player":"Vaibhav Sooryavanshi","pressure_balls":113,"pressure_innings":8,"pressure_runs":267.0,"pressure_strike_rate":236.3,"pressure_average":44.5,"pressure_innings_success_rate":50.0,"consensus_mean_rank":9.5,"pressure_wickets":null,"pressure_economy":null,"pressure_bowling_strike_rate":null},{"category":"Batter","rank":7,"player":"Virat Kohli","pressure_balls":322,"pressure_innings":20,"pressure_runs":567.0,"pressure_strike_rate":176.1,"pressure_average":51.5,"pressure_innings_success_rate":78.3,"consensus_mean_rank":10.0,"pressure_wickets":null,"pressure_economy":null,"pressure_bowling_strike_rate":null},{"category":"Batter","rank":8,"player":"Shreyas Iyer","pressure_balls":477,"pressure_innings":23,"pressure_runs":845.0,"pressure_strike_rate":177.1,"pressure_average":35.2,"pressure_innings_success_rate":83.1,"consensus_mean_rank":11.0,"pressure_wickets":null,"pressure_economy":null,"pressure_bowling_strike_rate":null},{"category":"Batter","rank":9,"player":"Ashutosh Sharma","pressure_balls":301,"pressure_innings":19,"pressure_runs":540.0,"pressure_strike_rate":179.4,"pressure_average":28.4,"pressure_innings_success_rate":94.4,"consensus_mean_rank":12.5,"pressure_wickets":null,"pressure_economy":null,"pressure_bowling_strike_rate":null},{"category":"Batter","rank":10,"player":"Suryakumar Yadav","pressure_balls":738,"pressure_innings":32,"pressure_runs":1311.0,"pressure_strike_rate":177.6,"pressure_average":45.2,"pressure_innings_success_rate":63.6,"consensus_mean_rank":12.5,"pressure_wickets":null,"pressure_economy":null,"pressure_bowling_strike_rate":null},{"category":"Bowler","rank":1,"player":"Sunil Narine","pressure_balls":462,"pressure_innings":37,"pressure_runs":null,"pressure_strike_rate":null,"pressure_average":null,"pressure_innings_success_rate":55.5,"consensus_mean_rank":1.5,"pressure_wickets":24.0,"pressure_economy":7.44,"pressure_bowling_strike_rate":19.25},{"category":"Bowler","rank":2,"player":"Mitchell Santner","pressure_balls":443,"pressure_innings":34,"pressure_runs":null,"pressure_strike_rate":null,"pressure_average":null,"pressure_innings_success_rate":53.1,"consensus_mean_rank":3.5,"pressure_wickets":37.0,"pressure_economy":7.87,"pressure_bowling_strike_rate":11.97},{"category":"Bowler","rank":3,"player":"Eshan Malinga","pressure_balls":316,"pressure_innings":21,"pressure_runs":null,"pressure_strike_rate":null,"pressure_average":null,"pressure_innings_success_rate":53.7,"consensus_mean_rank":5.0,"pressure_wickets":24.0,"pressure_economy":9.47,"pressure_bowling_strike_rate":13.17},{"category":"Bowler","rank":4,"player":"Rashid Khan","pressure_balls":742,"pressure_innings":53,"pressure_runs":null,"pressure_strike_rate":null,"pressure_average":null,"pressure_innings_success_rate":46.5,"consensus_mean_rank":6.5,"pressure_wickets":47.0,"pressure_economy":8.51,"pressure_bowling_strike_rate":15.79},{"category":"Bowler","rank":5,"player":"Ravi Bishnoi","pressure_balls":901,"pressure_innings":60,"pressure_runs":null,"pressure_strike_rate":null,"pressure_average":null,"pressure_innings_success_rate":49.0,"consensus_mean_rank":8.0,"pressure_wickets":53.0,"pressure_economy":8.46,"pressure_bowling_strike_rate":17.0},{"category":"Bowler","rank":6,"player":"Adil Rashid","pressure_balls":373,"pressure_innings":28,"pressure_runs":null,"pressure_strike_rate":null,"pressure_average":null,"pressure_innings_success_rate":46.9,"consensus_mean_rank":9.5,"pressure_wickets":24.0,"pressure_economy":8.61,"pressure_bowling_strike_rate":15.54},{"category":"Bowler","rank":7,"player":"Mukesh Choudhary","pressure_balls":138,"pressure_innings":11,"pressure_runs":null,"pressure_strike_rate":null,"pressure_average":null,"pressure_innings_success_rate":50.6,"consensus_mean_rank":11.0,"pressure_wickets":11.0,"pressure_economy":9.43,"pressure_bowling_strike_rate":12.55},{"category":"Bowler","rank":8,"player":"Rasikh Salam","pressure_balls":176,"pressure_innings":13,"pressure_runs":null,"pressure_strike_rate":null,"pressure_average":null,"pressure_innings_success_rate":53.6,"consensus_mean_rank":11.0,"pressure_wickets":12.0,"pressure_economy":10.26,"pressure_bowling_strike_rate":14.67},{"category":"Bowler","rank":9,"player":"Digvesh Rathi","pressure_balls":126,"pressure_innings":8,"pressure_runs":null,"pressure_strike_rate":null,"pressure_average":null,"pressure_innings_success_rate":50.0,"consensus_mean_rank":12.0,"pressure_wickets":6.0,"pressure_economy":7.76,"pressure_bowling_strike_rate":21.0},{"category":"Bowler","rank":10,"player":"Jacob Duffy","pressure_balls":231,"pressure_innings":17,"pressure_runs":null,"pressure_strike_rate":null,"pressure_average":null,"pressure_innings_success_rate":48.6,"consensus_mean_rank":12.5,"pressure_wickets":20.0,"pressure_economy":9.25,"pressure_bowling_strike_rate":11.55}];
+const bat = rows.filter(x=>x.category==="Batter").sort((a,b)=>a.rank-b.rank);
+const bowl = rows.filter(x=>x.category==="Bowler").sort((a,b)=>a.rank-b.rank);
+const fmt=(n,d=1)=>Number(n).toFixed(d);
+function table(data,headers,fields){
+ let h='<table><thead><tr>'+headers.map(x=>`<th>${x}</th>`).join('')+'</tr></thead><tbody>';
+ data.forEach(r=>{h+='<tr>'+fields.map((f,i)=>`<td class="${i===0?'':'num'}">${typeof f==='function'?f(r):r[f]}</td>`).join('')+'</tr>'});
+ return h+'</tbody></table>';
+}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('active',x===b));
+ document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===b.dataset.page));
+});
+function bars(el,data,value,color,scale){
+ document.getElementById(el).innerHTML=data.slice().sort((a,b)=>a[value]-b[value]).map(r=>`<div class="barline"><span class="barname">${r.player}</span><span class="bar ${color==='rust'?'rust':''}"><i style="width:${Math.max(2,r[value]/scale*100)}%"></i></span><span class="barvalue">${fmt(r[value],1)}</span></div>`).join('');
+}
+bars('batbars',bat,'pressure_strike_rate','green',250);
+bars('bowlbars',bowl,'pressure_economy','rust',12);
+document.getElementById('battable').innerHTML=table(bat,['Rank','Player','Balls','Innings','Runs','Pressure SR','Pressure avg','Consistency'],[
+ r=>r.rank,'player','pressure_balls','pressure_innings','pressure_runs',r=>fmt(r.pressure_strike_rate),r=>fmt(r.pressure_average),r=>fmt(r.pressure_innings_success_rate)+'%'
+]);
+document.getElementById('bowltable').innerHTML=table(bowl,['Rank','Player','Balls','Innings','Wickets','Economy','Bowl SR','Consistency'],[
+ r=>r.rank,'player','pressure_balls','pressure_innings','pressure_wickets',r=>fmt(r.pressure_economy,2),r=>fmt(r.pressure_bowling_strike_rate,2),r=>fmt(r.pressure_innings_success_rate)+'%'
+]);
+function options(el,data){document.getElementById(el).innerHTML=data.map(r=>`<option>${r.player}</option>`).join('')}
+options('batterpick',bat); options('bowlerpick',bowl);
+function detail(r,kind){
+ return kind==='bat'?`<b>${r.player}</b> recorded ${r.pressure_runs} runs from ${r.pressure_balls} pressure balls across ${r.pressure_innings} pressure innings. Pressure strike rate: ${fmt(r.pressure_strike_rate)}. Pressure average: ${fmt(r.pressure_average)}. Consistency: ${fmt(r.pressure_innings_success_rate)}%.`:
+ `<b>${r.player}</b> took ${r.pressure_wickets} wickets from ${r.pressure_balls} pressure balls across ${r.pressure_innings} pressure innings. Pressure economy: ${fmt(r.pressure_economy,2)}. Bowling strike rate: ${fmt(r.pressure_bowling_strike_rate,2)}. Consistency: ${fmt(r.pressure_innings_success_rate)}%.`;
+}
+document.getElementById('batterpick').onchange=e=>document.getElementById('batterdetail').innerHTML=detail(bat.find(r=>r.player===e.target.value),'bat');
+document.getElementById('bowlerpick').onchange=e=>document.getElementById('bowlerdetail').innerHTML=detail(bowl.find(r=>r.player===e.target.value),'bowl');
+document.getElementById('batterdetail').innerHTML=detail(bat[0],'bat');document.getElementById('bowlerdetail').innerHTML=detail(bowl[0],'bowl');
+let kind='Batter';
+function refreshCompare(){
+ const d=kind==='Batter'?bat:bowl;
+ options('playerone',d);options('playertwo',d);
+ const one=d.find(r=>r.player===document.getElementById('playerone').value)||d[0];
+ const two=d.find(r=>r.player===document.getElementById('playertwo').value)||d[1];
+ const fields=kind==='Batter'?[
+ ['Pressure strike rate','pressure_strike_rate'],['Pressure average','pressure_average'],['Pressure balls','pressure_balls'],['Innings consistency (%)','pressure_innings_success_rate']
+ ]:[
+ ['Pressure economy','pressure_economy'],['Bowling strike rate','pressure_bowling_strike_rate'],['Pressure wickets','pressure_wickets'],['Pressure balls','pressure_balls'],['Innings consistency (%)','pressure_innings_success_rate']
+ ];
+ document.getElementById('comparison').innerHTML='<table><thead><tr><th>Measure</th><th>'+one.player+'</th><th>'+two.player+'</th></tr></thead><tbody>'+
+ fields.map(([label,key])=>`<tr><td>${label}</td><td class="num">${fmt(one[key],key.includes('economy')||key.includes('strike_rate')?2:1)}</td><td class="num">${fmt(two[key],key.includes('economy')||key.includes('strike_rate')?2:1)}</td></tr>`).join('')+'</tbody></table>';
+}
+document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{kind=b.dataset.kind;document.querySelectorAll('[data-kind]').forEach(x=>x.classList.toggle('active',x===b));refreshCompare()});
+document.getElementById('playerone').onchange=refreshCompare;document.getElementById('playertwo').onchange=refreshCompare;
+refreshCompare();
+</script>
+</body></html>
