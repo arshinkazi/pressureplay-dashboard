@@ -12,17 +12,47 @@ GREEN, RUST, LINE = "#355b45", "#a34f38", "#deded5"
 
 st.markdown(f"""
 <style>
-.stApp {{background:{PAPER}; color:{INK};}}
-section[data-testid="stSidebar"] {{background:#eeede6;border-right:1px solid {LINE};}}
-h1,h2,h3 {{font-family:Georgia,'Times New Roman',serif!important;color:{INK};}}
+:root {{
+  color-scheme: light;
+  --text-color: {INK};
+  --background-color: {PAPER};
+  --secondary-background-color: #eeede6;
+  --primary-color: {GREEN};
+}}
+html, body, [data-testid="stAppViewContainer"], .stApp,
+[data-testid="stHeader"], [data-testid="stMain"] {{
+  background-color: {PAPER} !important;
+  color: {INK} !important;
+}}
+[data-testid="stSidebar"] {{
+  background-color: #eeede6 !important;
+  border-right: 1px solid {LINE};
+}}
+/* Explicitly set text colours: Streamlit's theme can otherwise leave
+   light text on the pale custom background on some deployments. */
+[data-testid="stAppViewContainer"] * {{
+  color: {INK};
+}}
+[data-testid="stSidebar"] * {{ color: {INK} !important; }}
+h1,h2,h3,h4,[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li,
+[data-testid="stWidgetLabel"] p,
+[data-testid="stCaptionContainer"] p,
+label, .stSelectbox, .stTextInput, .stRadio {{
+  color: {INK} !important;
+}}
+h1,h2,h3 {{font-family:Georgia,'Times New Roman',serif!important;}}
 p,label,div {{font-family:Arial,Helvetica,sans-serif;}}
-.eyebrow {{color:{GREEN};font-size:11px;letter-spacing:1.8px;text-transform:uppercase;}}
-.deck {{color:{MUTED};font-family:Georgia,serif;font-size:17px;line-height:1.45;}}
+.eyebrow {{color:{GREEN}!important;font-size:11px;letter-spacing:1.8px;text-transform:uppercase;}}
+.deck {{color:{MUTED}!important;font-family:Georgia,serif;font-size:17px;line-height:1.45;}}
 .rule {{border-top:1px solid {LINE};margin:14px 0 20px;}}
-.note {{background:#efeee8;border-left:3px solid {RUST};padding:11px 14px;color:{INK};}}
+.note {{background:#efeee8;border-left:3px solid {RUST};padding:11px 14px;color:{INK}!important;}}
+.note * {{color:{INK}!important;}}
 div[data-testid="stMetric"] {{background:transparent;border-top:2px solid {GREEN};padding-top:9px;}}
+div[data-testid="stMetric"] label, div[data-testid="stMetric"] [data-testid="stMetricValue"] {{color:{INK}!important;}}
 [data-testid="stDataFrame"] {{border:1px solid {LINE};}}
 .stButton button {{border-radius:3px;border:1px solid {GREEN};color:{GREEN};background:transparent;}}
+.stButton button * {{color:{GREEN}!important;}}
 </style>
 """, unsafe_allow_html=True)
 
