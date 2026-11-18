@@ -12,17 +12,71 @@ GREEN, RUST, LINE = "#355b45", "#a34f38", "#deded5"
 
 st.markdown(f"""
 <style>
-.stApp {{background:{PAPER}; color:{INK};}}
-section[data-testid="stSidebar"] {{background:#eeede6;border-right:1px solid {LINE};}}
-h1,h2,h3 {{font-family:Georgia,'Times New Roman',serif!important;color:{INK};}}
-p,label,div {{font-family:Arial,Helvetica,sans-serif;}}
-.eyebrow {{color:{GREEN};font-size:11px;letter-spacing:1.8px;text-transform:uppercase;}}
-.deck {{color:{MUTED};font-family:Georgia,serif;font-size:17px;line-height:1.45;}}
+:root {{ color-scheme: light; }}
+html, body, [data-testid="stAppViewContainer"], .stApp,
+[data-testid="stHeader"], [data-testid="stMain"] {{
+  background: {PAPER} !important; color: {INK} !important;
+}}
+[data-testid="stSidebar"] {{ background:#eeede6 !important; border-right:1px solid {LINE}; }}
+[data-testid="stAppViewContainer"] *, [data-testid="stSidebar"] * {{ color:{INK} !important; }}
+.stTextInput input, .stNumberInput input, .stTextArea textarea,
+[data-baseweb="input"] input, [data-baseweb="textarea"] textarea,
+[data-baseweb="select"] > div, [data-baseweb="popover"],
+[data-baseweb="menu"], [role="listbox"], [role="option"] {{
+  background:#ffffff !important; color:{INK} !important; border-color:#c9c9bf !important;
+}}
+/* All selectboxes across batting, bowling and comparison pages.
+   Force a light surface on nested BaseWeb nodes as Streamlit may retain
+   a dark widget background independently of the app canvas. */
+[data-testid="stSelectbox"] [data-baseweb="select"],
+[data-testid="stSelectbox"] [data-baseweb="select"] > div,
+[data-testid="stSelectbox"] [data-baseweb="select"] div,
+[data-testid="stSelectbox"] [data-baseweb="select"] span,
+[data-testid="stSelectbox"] [data-baseweb="select"] input,
+div[data-baseweb="popover"], div[data-baseweb="menu"],
+div[data-baseweb="popover"] *, div[data-baseweb="menu"] *,
+[role="listbox"], [role="option"], [role="listbox"] *, [role="option"] * {{
+  background-color:#ffffff !important;
+  color:{INK} !important;
+  border-color:#c9c9bf !important;
+  -webkit-text-fill-color:{INK} !important;
+}}
+[data-testid="stSelectbox"] svg {{ fill:{INK} !important; color:{INK} !important; }}
+[data-testid="stWidgetLabel"] *, [data-testid="stMarkdownContainer"] *,
+[data-testid="stCaptionContainer"] *, [data-testid="stMetric"] *,
+[data-testid="stRadio"] *, [data-testid="stCheckbox"] *,
+[data-testid="stSlider"] * {{ color:{INK} !important; }}
+/* Consistent custom callout surfaces are used instead of theme-dependent alerts. */
+.pp-callout {{
+  background:#eaf0f2 !important;
+  color:{INK} !important;
+  border:1px solid #b8c8ce;
+  border-left:4px solid {GREEN};
+  border-radius:4px;
+  padding:12px 15px;
+  line-height:1.5;
+}}
+.pp-callout * {{ color:{INK} !important; -webkit-text-fill-color:{INK} !important; }}
+.pp-warning {{
+  background:#f5eee6 !important;
+  color:{INK} !important;
+  border:1px solid #d9c6b4;
+  border-left:4px solid {RUST};
+  border-radius:4px;
+  padding:12px 15px;
+}}
+.pp-warning * {{ color:{INK} !important; -webkit-text-fill-color:{INK} !important; }}
+input::placeholder, textarea::placeholder {{ color:#69716b !important; opacity:1 !important; }}
+h1,h2,h3 {{font-family:Georgia,'Times New Roman',serif!important;color:{INK}!important;}}
+.eyebrow {{color:{GREEN}!important;font-size:11px;letter-spacing:1.8px;text-transform:uppercase;}}
+.deck {{color:{MUTED}!important;font-family:Georgia,serif;font-size:17px;line-height:1.45;}}
 .rule {{border-top:1px solid {LINE};margin:14px 0 20px;}}
-.note {{background:#efeee8;border-left:3px solid {RUST};padding:11px 14px;color:{INK};}}
+.note {{background:#efeee8;border-left:3px solid {RUST};padding:11px 14px;color:{INK}!important;}}
+.note * {{color:{INK}!important;}}
 div[data-testid="stMetric"] {{background:transparent;border-top:2px solid {GREEN};padding-top:9px;}}
 [data-testid="stDataFrame"] {{border:1px solid {LINE};}}
-.stButton button {{border-radius:3px;border:1px solid {GREEN};color:{GREEN};background:transparent;}}
+.stButton button {{border-radius:3px;border:1px solid {GREEN};color:{GREEN}!important;background:#ffffff;}}
+.stButton button * {{color:{GREEN}!important;}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -36,7 +90,7 @@ bowl = df[df.category.eq("Bowler")].sort_values("rank").copy()
 
 def chart_style(fig, height=360):
     fig.update_layout(
-        height=height, margin=dict(l=8,r=12,t=24,b=8),
+        height=height, margin=dict(l=18,r=42,t=42,b=34),
         paper_bgcolor=PAPER, plot_bgcolor=PAPER,
         font=dict(color=INK), legend_title_text="",
         xaxis=dict(showgrid=True,gridcolor=LINE,zeroline=False),
@@ -86,13 +140,13 @@ if page == "Overview":
         f=px.bar(bat.sort_values("pressure_strike_rate"),x="pressure_strike_rate",y="player",orientation="h",
                  labels={"pressure_strike_rate":"Strike rate","player":""},text="pressure_strike_rate")
         f.update_traces(marker_color=GREEN,texttemplate="%{text:.1f}",textposition="outside",cliponaxis=False)
-        st.plotly_chart(chart_style(f,390),use_container_width=True)
+        st.plotly_chart(chart_style(f,390),use_container_width=True,config={"displayModeBar":False,"scrollZoom":False})
     with b:
         st.markdown("### Pressure economy")
         f=px.bar(bowl.sort_values("pressure_economy",ascending=False),x="pressure_economy",y="player",orientation="h",
                  labels={"pressure_economy":"Economy","player":""},text="pressure_economy")
         f.update_traces(marker_color=RUST,texttemplate="%{text:.2f}",textposition="outside",cliponaxis=False)
-        st.plotly_chart(chart_style(f,390),use_container_width=True)
+        st.plotly_chart(chart_style(f,390),use_container_width=True,config={"displayModeBar":False,"scrollZoom":False})
 
 elif page == "Batting rankings":
     st.markdown("## Batters under pressure")
@@ -109,9 +163,14 @@ elif page == "Batting rankings":
         m=st.columns(4)
         for col,label,val in zip(m,["Pressure SR","Pressure average","Pressure balls","Consistency"],[f"{r.pressure_strike_rate:.1f}",f"{r.pressure_average:.1f}",f"{int(r.pressure_balls):,}",f"{r.pressure_innings_success_rate:.1f}%"]):
             col.metric(label,val)
-        st.info(f"{chosen} scored {int(r.pressure_runs)} runs from {int(r.pressure_balls)} pressure balls across {int(r.pressure_innings)} pressure innings in this sample.")
+        st.markdown(
+            f'<div class="pp-callout"><b>Player snapshot</b><br>{chosen} scored '
+            f'{int(r.pressure_runs)} runs from {int(r.pressure_balls)} pressure balls '
+            f'across {int(r.pressure_innings)} pressure innings in this sample.</div>',
+            unsafe_allow_html=True
+        )
     else:
-        st.warning("No player matches those filters.")
+        st.markdown('<div class="pp-warning">No player matches those filters.</div>', unsafe_allow_html=True)
 
 elif page == "Bowling rankings":
     st.markdown("## Bowlers under pressure")
@@ -128,9 +187,14 @@ elif page == "Bowling rankings":
         m=st.columns(4)
         for col,label,val in zip(m,["Pressure economy","Bowling SR","Pressure wickets","Consistency"],[f"{r.pressure_economy:.2f}",f"{r.pressure_bowling_strike_rate:.2f}",f"{int(r.pressure_wickets)}",f"{r.pressure_innings_success_rate:.1f}%"]):
             col.metric(label,val)
-        st.info(f"{chosen} took {int(r.pressure_wickets)} wickets from {int(r.pressure_balls)} pressure balls across {int(r.pressure_innings)} pressure innings.")
+        st.markdown(
+            f'<div class="pp-callout"><b>Player snapshot</b><br>{chosen} took '
+            f'{int(r.pressure_wickets)} wickets from {int(r.pressure_balls)} pressure balls '
+            f'across {int(r.pressure_innings)} pressure innings.</div>',
+            unsafe_allow_html=True
+        )
     else:
-        st.warning("No player matches those filters.")
+        st.markdown('<div class="pp-warning">No player matches those filters.</div>', unsafe_allow_html=True)
 
 elif page == "Player comparison":
     st.markdown("## Compare players")
@@ -149,8 +213,13 @@ elif page == "Player comparison":
     for metric,label in zip(metrics,labels):
         st.markdown(f"**{label}**")
         fig=px.bar(comp,x="player",y=metric,color="player",labels={"player":"","color":"Player",metric:label},text=metric)
-        fig.update_traces(textposition="outside")
-        st.plotly_chart(chart_style(fig,250),use_container_width=True,config={"displayModeBar":False})
+        # Keep value labels within the available plotting area.
+        fig.update_traces(textposition="outside", cliponaxis=False)
+        max_value = float(comp[metric].max()) if not comp.empty else 0
+        fig.update_yaxes(range=[0, max_value * 1.22 if max_value > 0 else 1])
+        fig.update_layout(margin=dict(l=18, r=28, t=48, b=42))
+        st.plotly_chart(chart_style(fig, 280), use_container_width=True,
+                        config={"displayModeBar":False, "scrollZoom":False, "displaylogo":False})
     st.dataframe(comp[["rank","player"]+metrics].rename(columns={"rank":"Rank","player":"Player"}),hide_index=True,use_container_width=True)
 
 else:
@@ -182,7 +251,12 @@ else:
 - This dashboard displays the top ten in each discipline.
 - Auction registration, price, availability, fitness and role are not modelled.
 """)
-    st.info("Treat the rankings as descriptive scouting evidence. Combine them with role, availability, fitness and auction-price checks before making recruitment decisions.")
+    st.markdown(
+        '<div class="pp-callout"><b>Important interpretation note</b><br>'
+        'Treat the rankings as descriptive scouting evidence. Combine them with role, '
+        'availability, fitness and auction-price checks before making recruitment decisions.</div>',
+        unsafe_allow_html=True
+    )
 
 st.markdown("---")
 st.caption("PressurePlay · SupeRR Selector Season 2 · Round 1 | Derived metrics from the supplied competition data pack.")
